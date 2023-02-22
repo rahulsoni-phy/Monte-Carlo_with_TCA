@@ -11,13 +11,11 @@ class Coordinates
 {
 public:
     Coordinates(Parameters& Parameters__):Parameters_(Parameters__){
-        Initialize();
+        
     }
     int lx_, ly_, size_;
     
-    Parameters &Parameters_;
-
-    void Initialize();
+    Parameters &Parameters_;    
     pair<int, vector<int>> Neighbours(int cell);
 
 };

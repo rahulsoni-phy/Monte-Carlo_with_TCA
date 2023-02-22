@@ -1,19 +1,22 @@
+#include <cstdio>
 #include <vector>
 #include <utility>
 
 #include "Parameters.hpp"
 #include "Coordinates.hpp"
 
-void Coordinates::Initialize(){
+pair<int, vector<int>> Coordinates::Neighbours(int cell){
     lx_ = Parameters_.Lx;
     ly_ = Parameters_.Ly;
-}
-
-pair<int, vector<int>> Coordinates::Neighbours(int cell){
+    size_=Parameters_.Total_Cells;
 
     int rx, ry;
     rx = cell%lx_;
     ry = cell/lx_;
+
+    if(cell>size_-1){
+        std::perror("Cell number cannot exceed total number of cells.");
+    }
 
     vector<int> neighs;
     int no_of_neighs;
@@ -48,6 +51,10 @@ pair<int, vector<int>> Coordinates::Neighbours(int cell){
     }
 
     no_of_neighs=neighs.size();
+
+    if(no_of_neighs>4){
+        std::perror("Each site can have a maximum of 4 neighbors. Check 'Neighbours' in Coordinates.cpp!");
+    }
 
     return make_pair(no_of_neighs,neighs);
     

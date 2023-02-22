@@ -6,13 +6,15 @@
 #include <cstdlib>  //defines standard C++ functions and macros! (like: atof, atoi, abs, rand etc.)
 #include <string>   //for objects that can be represented as stream of characters!
 #include <stdexcept>//defines a set of standard exceptions and report common errors!
-//#include <random>   //for random numbers!
-#include <complex>  //for complex numbers!
+#include <random>   //for random numbers!
 #include <cmath>    //for common mathematical functions!
-#include <cassert>  //error handling library that aborts the code if defined condition are not met!
+
 
 
 #include "Parameters.hpp"
+#include "Coordinates.hpp"
+#include "Hamiltonian.hpp"
+#include "MC_update.hpp"
 
 
 using namespace std;
