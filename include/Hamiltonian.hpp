@@ -15,12 +15,16 @@ public:
         Initialize();
     }
     int lx_, ly_, size_;
+    double Spin_;
+
+    vector<double> Theta_, Phi_;
+    vector<vector<double>> Stot_;
     
     Parameters &Parameters_;
     Coordinates &Coordinates_;
 
     void Initialize();
-    double Calculate_Energy();
+    double Calculate_Energy(vector<vector<double>> stot_, vector<double> theta_, vector<double> phi_);
 
 };
 
