@@ -11,65 +11,59 @@
 #define PI acos(-1.0)
 
 void Hamiltonian::Initialize(){
-    Spin_ = Parameters_.Spin_mag; 
+    spin_ = Parameters_.Spin_mag; 
     size_ = Parameters_.Total_Cells;
+}
 
+vector<double> Hamiltonian::Random_Spin_Config(int cell){
+
+    vector<double> stot_;
+
+    stot_.resize(3);
     srand (static_cast <unsigned> (time(0))); //"seed" the random number generator
 
     float r1,r2,r3;
-
     r1 = static_cast <float> (rand()) / ( static_cast <float> (RAND_MAX) ); //generate a random number from 0.0 to 1.0
     r2 = static_cast <float> (rand()) / ( static_cast <float> (RAND_MAX) );
     r3 = static_cast <float> (rand()) / ( static_cast <float> (RAND_MAX) );
 
+    double phi_,theta_;
 
-    Stot_.resize(3);
-    for(int i=0;i<3;i++){
-        Stot_[i].resize(size_);
+    phi_ = ((60.0*r1))*2.0*PI/60.0;
+    theta_ = acos((30.0*r2)/(30.0));
+    if(r3>0.5){
+        theta_ = PI - theta_;
     }
 
-    Theta_.resize(size_);
-    Phi_.resize(size_);
+    stot_[0] = spin_*sin(theta_)*cos(phi_);
+    stot_[1] = spin_*sin(theta_)*sin(phi_);
+    stot_[2] = spin_*cos(theta_);
 
-    for(int cell=0;cell<size_;cell++){
-
-        Phi_[cell] = ((60.0*r1))*2.0*PI/60.0;
-        Theta_[cell] = acos((30.0*r2)/(30.0));
-
-        if(r3>0.5){
-            Theta_[cell] = PI - Theta_[cell];
-        }
-
-        Stot_[0][cell] = Spin_*sin(Theta_[cell])*cos(Phi_[cell]);
-        Stot_[1][cell] = Spin_*sin(Theta_[cell])*sin(Phi_[cell]);
-        Stot_[2][cell] = Spin_*cos(Theta_[cell]);
-
-    }
+    return stot_;
 }
 
 
-double Hamiltonian::Calculate_Energy(vector<vector<double>> stot_, vector<double> theta_, vector<double> phi_){
+double Hamiltonian::Calculate_Energy(vector<vector<double>> stot_){
     
-    double E_HUND,E_B;
-    double E_Total;
-    E_Total=0.0;
+    double E_HUND,E_B,E_Total;
+    E_HUND=0.0; E_B=0.0;
 
     int neigh_index;
 
     for(int cell=0;cell<size_;cell++){
+        E_B += -Parameters_.B_mag*stot_[cell][2];
 
-        auto result = Coordinates_.Neighbours(cell);
+        auto neigh_pair = Coordinates_.Neighbours(cell);
 
-        for(int neigh=0;neigh<result.second.size();neigh++){
-            neigh_index = result.second[neigh];
+        for(int neigh=0;neigh<neigh_pair.second.size();neigh++){
+            neigh_index = neigh_pair.second[neigh];
+
+            E_HUND += Parameters_.J_val*(stot_[cell][0]*stot_[neigh_index][0] 
+                    + stot_[cell][1]*stot_[neigh_index][1] + stot_[cell][2]*stot_[neigh_index][2]);
         }
-
     }
 
+    E_Total = E_B + E_HUND;
 
-    //Eng_JH = JH * ( sx[i]*(sx[j1] + sx[j2] + sx[j3] + sx[j4])
-      //                      +   sy[i]*(sy[j1] + sy[j2] + sy[j3] + sy[j4])
-        //                    +   sz[i]*(sz[j1] + sz[j2] + sz[j3] + sz[j4]) )
-          //      Eng_B = -B * sz[i]
-            //    E_old = Eng_JH + Eng_B
+    return E_Total;
 }

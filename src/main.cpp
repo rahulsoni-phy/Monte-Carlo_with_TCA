@@ -14,12 +14,14 @@
 #include "Parameters.hpp"
 #include "Coordinates.hpp"
 #include "Hamiltonian.hpp"
-#include "MC_update.hpp"
+#include "MC_Engine.hpp"
 
 
 using namespace std;
 
 int main (){
+
+    Parameters Parameters;
 
 
     return 0;

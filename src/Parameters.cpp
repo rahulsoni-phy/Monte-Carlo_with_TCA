@@ -63,8 +63,8 @@ void Parameters::Initialize(string input_file){
     cout<<"Number of Equilibriation = "<<N_Eq<<endl;
     cout<<"Number of Averaging = "<<N_Avg<<endl;
 
-    Temp_min = matchstring(input_file, "Min_Temperature");
-    Temp_max = matchstring(input_file, "Max_Temperature");
+    Temp_file = matchstring2(input_file, "Temperature_File");
+    cout<<"Reading temperatures from this file = "<<Temp_file<<endl;
     
     cout<<"-------------------------------------------"<<endl;
     cout<<"Finished reading the input file"<<endl;
